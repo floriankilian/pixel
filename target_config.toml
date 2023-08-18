@@ -2,16 +2,16 @@ ignored_colors = []
 allowed_colors = ["6D001A","BE0039","FF4500","FFA800","FFD635","FFF8B8","00A368","00CC78","7EED56","00756F","009EAA","00CCC0","2450A4","3690EA","51E9F4","493AC1","6A5CFF","94B3FF","811E9F","B44AC0","E4ABFF","DE107F","FF3881","FF99AA","6D482F","9C6926","FFB470","000000","515252","898D90","D4D7D9","FFFFFF"]
 width = 3000
 height = 2000
-add-x = 1500
-add-y = 1000
+add-x = 0
+add-y = 0
 default_prio = 120
 
 [[structure]]
 name = "swiss 1"
 file = "swiss1.png"
 disabled = false
-startx = 182
-starty = -868
+startx = 1682
+starty = 632
 priority = 200
 overlay_only = false
 
@@ -19,8 +19,8 @@ overlay_only = false
 name = "swiss 2"
 file = "swiss2.png"
 disabled = false
-startx = 796
-starty = -868
+startx = 2296
+starty = 632
 priority = 200
 overlay_only = false
 
@@ -28,7 +28,34 @@ overlay_only = false
 name = "swiss 3"
 file = "swiss3.png"
 disabled = false
-startx = -599
-starty = -316
+startx = 901
+starty = 1184
+priority = 200
+overlay_only = false
+
+[[structure]]
+name = "swiss 24"
+file = "swiss4.png"
+disabled = false
+startx = 781
+starty = 450
+priority = 200
+overlay_only = false
+
+[[structure]]
+name = "swiss 5"
+file = "swiss5.png"
+disabled = false
+startx = 930
+starty = 1743
+priority = 200
+overlay_only = false
+
+[[structure]]
+name = "swiss 6"
+file = "swiss6.png"
+disabled = false
+startx = 2889
+starty = 214
 priority = 200
 overlay_only = false

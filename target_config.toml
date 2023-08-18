@@ -6,11 +6,3 @@ add-x = 1500
 add-y = 1000
 default_prio = 120
 
-[[structure]]
-name = "canada"
-file = "canada_without_flags.png"
-disabled = false
-startx = 90
-starty = 150
-priority = 200
-overlay_only = false

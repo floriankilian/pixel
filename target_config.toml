@@ -59,12 +59,3 @@ startx = 2889
 starty = 214
 priority = 200
 overlay_only = false
-
-[[structure]]
-name = "alien"
-file = "placeCH/alien-hr-giger.png"
-disabled = false
-startx = 1500
-starty = 100
-priority = 250
-overlay_only = false

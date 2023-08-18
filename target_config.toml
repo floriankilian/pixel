@@ -6,3 +6,29 @@ add-x = 1500
 add-y = 1000
 default_prio = 120
 
+[[structure]]
+name = "swiss 1"
+file = "swiss1.png"
+disabled = false
+startx = 1682
+starty = 632
+priority = 200
+overlay_only = false
+
+[[structure]]
+name = "swiss 2"
+file = "swiss2.png"
+disabled = false
+startx = 2296
+starty = 632
+priority = 200
+overlay_only = false
+
+[[structure]]
+name = "swiss 3"
+file = "swiss3.png"
+disabled = false
+startx = 901
+starty = 1184
+priority = 200
+overlay_only = false

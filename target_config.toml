@@ -68,12 +68,3 @@ startx = 500
 starty = 500
 priority = 10
 overlay_only = false
-
-[[structure]]
-name = "test color gradient"
-file = "gradient.png"
-disabled = false
-startx = 500
-starty = 500
-priority = 10
-overlay_only = false

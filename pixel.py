@@ -208,7 +208,7 @@ def work_config(cfg: str, picture_folder: str):
         exit(2)
     logger.info("DONE with config")
 
-def copy_wrong_colors(picture_folder: str, source_folder: str, destination_folder: str):
+def copy_wrong_colors(picture_folder: str, destination_folder: str):
     """
     Copy all images from source_folder to destination_folder, but only if they contain wrong colors
     :param picture_folder: folder for input pictures
@@ -216,10 +216,9 @@ def copy_wrong_colors(picture_folder: str, source_folder: str, destination_folde
     :param destination_folder: folder to copy images with wrong colors to
     """
     path_exists(picture_folder, False)
-    path_exists(source_folder, False)
     path_exists(destination_folder, False)
 
-    source_path = pathlib.Path(source_folder)
+    source_path = pathlib.Path(picture_folder)
     dest_path = pathlib.Path(destination_folder)
 
     files_copied = 0

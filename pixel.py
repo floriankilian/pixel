@@ -255,7 +255,7 @@ def copy_wrong_colors(picture_folder: str, destination_folder_original: str, des
                         if color_distance != 0:
                             if color_distance > COLOR_DISTANCE_THRESHOLD:
                                 wrong_colors.add(hex_color)
-                            logger.info(f"Original Color: {hex_color}, Nearest Color: {nearest_color}, Distance: {color_distance}")
+                            # logger.info(f"Original Color: {hex_color}, Nearest Color: {nearest_color}, Distance: {color_distance}")
                             color_distances.append(color_distance)
                             corrected_img.putpixel((x, y), hex_to_col(nearest_color) + (color[3],))  # Correct the color
 

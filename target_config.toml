@@ -62,7 +62,7 @@ overlay_only = false
 
 [[structure]]
 name = "swiss 6"
-file = "swiss6-crossoncanvas.png"
+file = "swiss6-finalcleanup.png"
 disabled = false
 startx = 2889
 starty = 214

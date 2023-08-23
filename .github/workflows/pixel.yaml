@@ -38,12 +38,11 @@ jobs:
       - run: pip install -r requirements.txt
       - run: ./bin/generate.sh
       - name: Extract latest commit details
-          id: extract
-          run: |
-            echo "::set-output name=commit_message::$(git log -1 --pretty=format:'%B')"
-            echo "::set-output name=author_name::$(git log -1 --pretty=format:'%an')"
-            echo "::set-output name=author_email::$(git log -1 --pretty=format:'%ae')"
-
+        id: extract
+        run: |
+          echo "::set-output name=commit_message::$(git log -1 --pretty=format:'%B')"
+          echo "::set-output name=author_name::$(git log -1 --pretty=format:'%an')"
+          echo "::set-output name=author_email::$(git log -1 --pretty=format:'%ae')"
       - name: Commit & Push changes
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions-js/push@master

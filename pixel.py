@@ -220,11 +220,13 @@ def copy_wrong_colors(picture_folder: str, source_folder: str, destination_folde
     path_exists(destination_folder, False)
 
     source_path = pathlib.Path(source_folder)
-    destination_path = pathlib.Path(destination_folder)
+    dest_path = pathlib.Path(destination_folder)
 
-    for file_path in source_path.iterdir():
-        if file_path.suffix == ".png":
-            input_img = Image.open(file_path)
+    files_copied = 0
+
+    for file in source_path.iterdir():
+        if file.suffix == ".png":
+            input_img = Image.open(file)
             input_img = input_img.convert("RGBA")
             wrong_colors = set()
             for x in range(input_img.size[0]):
@@ -234,7 +236,12 @@ def copy_wrong_colors(picture_folder: str, source_folder: str, destination_folde
                     if hex_color not in allowed_colors_dict:
                         wrong_colors.add(hex_color)
             if wrong_colors:
-                shutil.copy(file_path, destination_path.joinpath(file_path.name))
+                shutil.copy(file, dest_path / file.name)
+                files_copied += 1
+                logger.info(f"Copied file {file.name} due to wrong colors: {', '.join(wrong_colors)}")
+
+    logger.info(f"Total files copied due to wrong colors: {files_copied}")
+
 
 
 def generate_data(img: Image, prio_img: Optional[Image.Image], both_img: Optional[Image.Image], cfg: Config,
@@ -341,8 +348,8 @@ def generate_data(img: Image, prio_img: Optional[Image.Image], both_img: Optiona
                 struct2.update({(x1, y1): (hex_color, prio)})
         structures.update({name: struct2})
         if wrong_colors:
-            logger.warning(f"\"{name}\" has wrong_colors colors!\n    {', '.join(wrong_colors)}")
             copy_wrong_colors(picture_folder, str(picture_folder) + "/wrong_colors", str(picture_folder) + "/wrong_colors_copied")
+            logger.warning(f"\"{name}\" has wrong_colors colors!\n    {', '.join(wrong_colors)}")
         if out_of_image:
             logger.warning(f"Ran out of normal image with config: '{cfg.cfg}', image: \"{name}\"")
 

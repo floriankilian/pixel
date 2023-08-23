@@ -43,9 +43,9 @@ jobs:
       - name: Extract latest commit details
         id: extract
         run: |
-          echo "::set-output name=commit_message::$(git log -1 --pretty=format:'%B')"
-          echo "::set-output name=author_name::$(git log -1 --pretty=format:'%an')"
-          echo "::set-output name=author_email::$(git log -1 --pretty=format:'%ae')"
+          echo "commit_message=$(git log -1 --pretty=format:'%B')" >> $GITHUB_ENV
+          echo "author_name=$(git log -1 --pretty=format:'%an')" >> $GITHUB_ENV
+          echo "author_email=$(git log -1 --pretty=format:'%ae')" >> $GITHUB_ENV
       
       - name: Commit & Push changes
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

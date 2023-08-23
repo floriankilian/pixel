@@ -3,6 +3,7 @@ import base64
 import json
 import logging
 import pathlib
+import shutil
 from io import BytesIO
 from typing import Optional
 

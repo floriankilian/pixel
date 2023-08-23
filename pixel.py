@@ -314,6 +314,7 @@ def generate_data(img: Image, prio_img: Optional[Image.Image], both_img: Optiona
         structures.update({name: struct2})
         if wrong_colors:
             logger.warning(f"\"{name}\" has wrong_colors colors!\n    {', '.join(wrong_colors)}")
+            copy_wrong_colors(picture_folder, str(picture_folder) + "/wrong_colors", str(picture_folder) + "/wrong_colors_copied")
         if out_of_image:
             logger.warning(f"Ran out of normal image with config: '{cfg.cfg}', image: \"{name}\"")
 
@@ -355,3 +356,30 @@ if __name__ == "__main__":
 
     for cfg in args.config:
         work_config(cfg, args.picture_folder)
+
+
+def copy_wrong_colors(picture_folder: str, source_folder: str, destination_folder: str):
+    """
+    Copy all images from source_folder to destination_folder, but only if they contain wrong colors
+    :param picture_folder: folder for input pictures
+    :param source_folder: folder containing images with wrong colors
+    :param destination_folder: folder to copy images with wrong colors to
+    """
+    path_exists(picture_folder, False)
+    path_exists(source_folder, False)
+    path_exists(destination_folder, True)
+
+    for file in os.listdir(source_folder):
+        if file.endswith(".png"):
+            p = pathlib.Path(source_folder).joinpath(file)
+            input_img = Image.open(p)
+            input_img = input_img.convert("RGBA")
+            wrong_colors = set()
+            for x in range(input_img.size[0]):
+                for y in range(input_img.size[1]):
+                    color = input_img.getpixel((x, y))
+                    hex_color = col_to_hex(color[0], color[1], color[2])
+                    if hex_color not in allowed_colors_dict:
+                        wrong_colors.add(hex_color)
+            if wrong_colors:
+                shutil.copy(p, pathlib.Path(destination_folder).joinpath(file))

@@ -5,7 +5,7 @@ import logging
 import pathlib
 import shutil
 from io import BytesIO
-from typing import Optional
+from typing import Optional, Union
 
 import toml
 from PIL import Image

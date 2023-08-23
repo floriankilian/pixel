@@ -66,5 +66,14 @@ file = "swiss6-finalcleanup.png"
 disabled = false
 startx = 2889
 starty = 214
-priority = 100
+priority = 199
+overlay_only = false
+
+[[structure]]
+name = "test"
+file = "placeCH/lion.png"
+disabled = false
+startx = 100
+starty = 100
+priority = 200
 overlay_only = false

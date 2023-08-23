@@ -209,18 +209,22 @@ def work_config(cfg: str, picture_folder: str):
         exit(2)
     logger.info("DONE with config")
 
-def copy_wrong_colors(picture_folder: str, destination_folder: str):
+
+def copy_wrong_colors(picture_folder: str, destination_folder_original: str, destination_folder_corrected: str):
     """
-    Copy all images from source_folder to destination_folder, but only if they contain wrong colors
+    Copy all images from source_folder to destination_folder, but only if they contain wrong colors.
+    Save the corrected version to destination_folder_corrected and the original to destination_folder_original.
     :param picture_folder: folder for input pictures
-    :param source_folder: folder containing images with wrong colors
-    :param destination_folder: folder to copy images with wrong colors to
+    :param destination_folder_original: folder to save original images with wrong colors
+    :param destination_folder_corrected: folder to save corrected images
     """
     path_exists(picture_folder, False)
-    path_exists(destination_folder, False)
+    path_exists(destination_folder_corrected, False)
+    path_exists(destination_folder_original, False)
 
     source_path = pathlib.Path(picture_folder)
-    dest_path = pathlib.Path(destination_folder)
+    dest_path_corrected = pathlib.Path(destination_folder_corrected)
+    dest_path_original = pathlib.Path(destination_folder_original)
 
     files_copied = 0
 
@@ -229,18 +233,25 @@ def copy_wrong_colors(picture_folder: str, destination_folder: str):
             input_img = Image.open(file)
             input_img = input_img.convert("RGBA")
             wrong_colors = set()
+            corrected_img = input_img.copy()  # Create a copy to modify
+
             for x in range(input_img.size[0]):
                 for y in range(input_img.size[1]):
                     color = input_img.getpixel((x, y))
                     hex_color = col_to_hex(color[0], color[1], color[2])
                     if hex_color not in allowed_colors_dict:
                         wrong_colors.add(hex_color)
+                        corrected_color = get_nearest_color(hex_color)
+                        corrected_img.putpixel((x, y), hex_to_col(corrected_color) + (color[3],))  # Correct the color
+
             if wrong_colors:
-                shutil.copy(file, dest_path / file.name)
+                corrected_img.save(dest_path_corrected / file.name)  # Save the corrected image
+                shutil.copy(file, dest_path_original / file.name)  # Save the original image
                 files_copied += 1
                 logger.info(f"Copied file {file.name} due to wrong colors: {', '.join(wrong_colors)}")
 
     logger.info(f"Total files copied due to wrong colors: {files_copied}")
+
 
 
 
@@ -348,7 +359,7 @@ def generate_data(img: Image, prio_img: Optional[Image.Image], both_img: Optiona
                 struct2.update({(x1, y1): (hex_color, prio)})
         structures.update({name: struct2})
         if wrong_colors:
-            copy_wrong_colors(picture_folder, str(picture_folder) + "/wrong_colors_copied")
+            copy_wrong_colors(picture_folder, str(picture_folder) + "/colors_wrong", str(picture_folder) + "/colors_fix")
             logger.warning(f"\"{name}\" has wrong_colors colors!\n    {', '.join(wrong_colors)}")
         if out_of_image:
             logger.warning(f"Ran out of normal image with config: '{cfg.cfg}', image: \"{name}\"")

@@ -54,6 +54,15 @@ overlay_only = false
 [[structure]]
 name = "swiss 6"
 file = "swiss6.png"
+disabled = true
+startx = 2889
+starty = 214
+priority = 200
+overlay_only = false
+
+[[structure]]
+name = "swiss 6"
+file = "swiss6-crossoncanvas.png"
 disabled = false
 startx = 2889
 starty = 214

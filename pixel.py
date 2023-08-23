@@ -217,7 +217,7 @@ def copy_wrong_colors(picture_folder: str, source_folder: str, destination_folde
     """
     path_exists(picture_folder, False)
     path_exists(source_folder, False)
-    path_exists(destination_folder, True)
+    path_exists(destination_folder, False)
 
     for file in os.listdir(source_folder):
         if file.endswith(".png"):

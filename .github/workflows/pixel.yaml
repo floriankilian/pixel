@@ -55,9 +55,9 @@ jobs:
           branch: ${{ github.head_ref || github.ref_name }}
           author_name: "GitBot"
           # If the event that triggered this workflow was a push, we'll also attribute the commit to the original author using co-authoring.
-          coauthor_name: "${{ github.event_name == 'push' && steps.extract.outputs.author_name || null }}" # Using the name of the author of the original commit as co-author
-          coauthor_email: "${{ github.event_name == 'push' && steps.extract.outputs.author_email || null }}" # Using the email of the author of the original commit as co-author
-          message: "Bot Commit: ${{ github.event_name == 'push' && steps.extract.outputs.commit_message || null }}"
+          coauthor_name: "${{ github.event_name == 'push' && env.author_name || null }}" # Using the name of the author of the original commit as co-author
+          coauthor_email: "${{ github.event_name == 'push' && env.author_email || null }}" # Using the email of the author of the original commit as co-author
+          message: "Bot Commit: ${{ github.event_name == 'push' && (env.commit_message != '' && env.commit_message) || null }}"
       - run: echo $(git rev-parse HEAD)
       - id: head
         run: -|

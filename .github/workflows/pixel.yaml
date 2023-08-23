@@ -37,12 +37,16 @@ jobs:
           cache: 'pip'
       - run: pip install -r requirements.txt
       - run: ./bin/generate.sh
+      
+      # This step is responsible for extracting details about the latest previous commit, that triggered this action
+      # We'll fetch the commit message, the author's name, and the author's email.
       - name: Extract latest commit details
         id: extract
         run: |
           echo "::set-output name=commit_message::$(git log -1 --pretty=format:'%B')"
           echo "::set-output name=author_name::$(git log -1 --pretty=format:'%an')"
           echo "::set-output name=author_email::$(git log -1 --pretty=format:'%ae')"
+      
       - name: Commit & Push changes
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions-js/push@master
@@ -50,9 +54,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref || github.ref_name }}
           author_name: "GitBot"
-          coauthor_name: "${{ steps.extract.outputs.author_name }}"
-          coauthor_email: "${{ steps.extract.outputs.author_email }}"
-          message: "Bot Commit: ${{ steps.extract.outputs.commit_message }}"
+          # If the event that triggered this workflow was a push, we'll also attribute the commit to the original author using co-authoring.
+          coauthor_name: "${{ github.event_name == 'push' && steps.extract.outputs.author_name || null }}" # Using the name of the author of the original commit as co-author
+          coauthor_email: "${{ github.event_name == 'push' && steps.extract.outputs.author_email || null }}" # Using the email of the author of the original commit as co-author
+          message: "Bot Commit: ${{ github.event_name == 'push' && steps.extract.outputs.commit_message || null }}"
       - run: echo $(git rev-parse HEAD)
       - id: head
         run: -|

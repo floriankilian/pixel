@@ -219,10 +219,12 @@ def copy_wrong_colors(picture_folder: str, source_folder: str, destination_folde
     path_exists(source_folder, False)
     path_exists(destination_folder, False)
 
-    for file in os.listdir(source_folder):
-        if file.endswith(".png"):
-            p = pathlib.Path(source_folder).joinpath(file)
-            input_img = Image.open(p)
+    source_path = pathlib.Path(source_folder)
+    destination_path = pathlib.Path(destination_folder)
+
+    for file_path in source_path.iterdir():
+        if file_path.suffix == ".png":
+            input_img = Image.open(file_path)
             input_img = input_img.convert("RGBA")
             wrong_colors = set()
             for x in range(input_img.size[0]):
@@ -232,7 +234,8 @@ def copy_wrong_colors(picture_folder: str, source_folder: str, destination_folde
                     if hex_color not in allowed_colors_dict:
                         wrong_colors.add(hex_color)
             if wrong_colors:
-                shutil.copy(p, pathlib.Path(destination_folder).joinpath(file))
+                shutil.copy(file_path, destination_path.joinpath(file_path.name))
+
 
 def generate_data(img: Image, prio_img: Optional[Image.Image], both_img: Optional[Image.Image], cfg: Config,
                   pixels_json: dict, shift_coord, picture_folder: str):

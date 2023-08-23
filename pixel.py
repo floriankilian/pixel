@@ -347,7 +347,7 @@ def generate_data(img: Image, prio_img: Optional[Image.Image], both_img: Optiona
                 struct2.update({(x1, y1): (hex_color, prio)})
         structures.update({name: struct2})
         if wrong_colors:
-            copy_wrong_colors(picture_folder, str(picture_folder) + "/wrong_colors", str(picture_folder) + "/wrong_colors_copied")
+            copy_wrong_colors(picture_folder, str(picture_folder) + "/wrong_colors_copied")
             logger.warning(f"\"{name}\" has wrong_colors colors!\n    {', '.join(wrong_colors)}")
         if out_of_image:
             logger.warning(f"Ran out of normal image with config: '{cfg.cfg}', image: \"{name}\"")

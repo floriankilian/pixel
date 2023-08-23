@@ -242,14 +242,18 @@ def copy_wrong_colors(picture_folder: str, destination_folder_original: str, des
             wrong_colors = set()
             corrected_img = input_img.copy()  # Create a copy to modify
 
+            COLOR_DISTANCE_THRESHOLD = 50  # Define a suitable threshold value
+
             for x in range(input_img.size[0]):
                 for y in range(input_img.size[1]):
                     color = input_img.getpixel((x, y))
                     hex_color = col_to_hex(color[0], color[1], color[2])
                     if hex_color not in allowed_colors_dict:
-                        wrong_colors.add(hex_color)
-                        corrected_color = get_nearest_color(hex_color)
-                        corrected_img.putpixel((x, y), hex_to_col(corrected_color) + (color[3],))  # Correct the color
+                        nearest_color, color_distance = get_nearest_color(hex_color, True)
+                        if color_distance <= COLOR_DISTANCE_THRESHOLD:
+                            corrected_img.putpixel((x, y), hex_to_col(nearest_color) + (color[3],))  # Correct the color
+                        else:
+                            wrong_colors.add(hex_color)
 
             if wrong_colors:
                 corrected_img.save(dest_path_corrected / file.name)  # Save the corrected image

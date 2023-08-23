@@ -66,5 +66,5 @@ file = "swiss6-finalcleanup.png"
 disabled = false
 startx = 2889
 starty = 214
-priority = 200
+priority = 100
 overlay_only = false

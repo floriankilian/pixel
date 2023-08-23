@@ -235,14 +235,14 @@ def copy_wrong_colors(picture_folder: str, destination_folder_original: str, des
 
     files_copied = 0
 
+    COLOR_DISTANCE_THRESHOLD = 50  # Define a suitable threshold value
+
     for file in source_path.iterdir():
         if file.suffix == ".png":
             input_img = Image.open(file)
             input_img = input_img.convert("RGBA")
             wrong_colors = set()
             corrected_img = input_img.copy()  # Create a copy to modify
-
-            COLOR_DISTANCE_THRESHOLD = 50  # Define a suitable threshold value
 
             color_distances = []  # List to store all color distances
 
@@ -252,24 +252,24 @@ def copy_wrong_colors(picture_folder: str, destination_folder_original: str, des
                     hex_color = col_to_hex(color[0], color[1], color[2])
                     if hex_color not in allowed_colors_dict:
                         nearest_color, color_distance = get_nearest_color(hex_color, True)
-                        color_distances.append(color_distance)
-                        logger.info(f"Original Color: {hex_color}, Nearest Color: {nearest_color}, Distance: {color_distance}")
-                        if color_distance <= COLOR_DISTANCE_THRESHOLD:
+                        if color_distance != 0:
+                            if color_distance > COLOR_DISTANCE_THRESHOLD:
+                                wrong_colors.add(hex_color)
+                            logger.info(f"Original Color: {hex_color}, Nearest Color: {nearest_color}, Distance: {color_distance}")
+                            color_distances.append(color_distance)
                             corrected_img.putpixel((x, y), hex_to_col(nearest_color) + (color[3],))  # Correct the color
-                        else:
-                            wrong_colors.add(hex_color)
 
-            # Calculate and log percentiles and median
-            color_distances.sort()
-            percentile_25 = color_distances[int(len(color_distances) * 0.25)]
-            percentile_50 = color_distances[int(len(color_distances) * 0.50)]  # This is also the median
-            percentile_75 = color_distances[int(len(color_distances) * 0.75)]
-
-            logger.info(f"25th Percentile of Color Distances: {percentile_25}")
-            logger.info(f"Median (50th Percentile) of Color Distances: {percentile_50}")
-            logger.info(f"75th Percentile of Color Distances: {percentile_75}")
-
+            # Calculate and log percentiles and median for wrong colors
             if wrong_colors:
+                color_distances.sort()
+                percentile_25 = color_distances[int(len(color_distances) * 0.25)]
+                percentile_50 = color_distances[int(len(color_distances) * 0.50)]  # This is also the median
+                percentile_75 = color_distances[int(len(color_distances) * 0.75)]
+
+                logger.info(f"25th Percentile of Wrong Color Distances: {percentile_25}")
+                logger.info(f"Median (50th Percentile) of Wrong Color Distances: {percentile_50}")
+                logger.info(f"75th Percentile of Wrong Color Distances: {percentile_75}")
+
                 corrected_img.save(dest_path_corrected / file.name)  # Save the corrected image
                 shutil.copy(file, dest_path_original / file.name)  # Save the original image
                 files_copied += 1

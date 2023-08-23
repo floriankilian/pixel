@@ -37,8 +37,13 @@ jobs:
           cache: 'pip'
       - run: pip install -r requirements.txt
       - run: ./bin/generate.sh
-      - name: Extract previous commit message
-        run: echo "COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.event.before }})" >> $GITHUB_ENV
+      - name: Extract latest commit details
+          id: extract
+          run: |
+            echo "::set-output name=commit_message::$(git log -1 --pretty=format:'%B')"
+            echo "::set-output name=author_name::$(git log -1 --pretty=format:'%an')"
+            echo "::set-output name=author_email::$(git log -1 --pretty=format:'%ae')"
+
       - name: Commit & Push changes
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions-js/push@master
@@ -46,7 +51,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref || github.ref_name }}
           author_name: "GitBot"
-          message: "Bot Commit: ${{ env.COMMIT_MSG }}" #adds previous commit message to give the overlay.pngs a file history
+          coauthor_name: "${{ steps.extract.outputs.author_name }}"
+          coauthor_email: "${{ steps.extract.outputs.author_email }}"
+          message: "Bot Commit: ${{ steps.extract.outputs.commit_message }}"
       - run: echo $(git rev-parse HEAD)
       - id: head
         run: -|

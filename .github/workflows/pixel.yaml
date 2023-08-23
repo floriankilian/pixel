@@ -37,7 +37,7 @@ jobs:
           cache: 'pip'
       - run: pip install -r requirements.txt
       - run: ./bin/generate.sh
-      - name: Extract commit message
+      - name: Extract previous commit message
         run: echo "COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.event.before }})" >> $GITHUB_ENV
       - name: Commit & Push changes
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
@@ -45,8 +45,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref || github.ref_name }}
-          author_name: 'GitBot'
-          message: "Bot Commit: ${{ env.COMMIT_MSG }}"
+          author_name: "GitBot"
+          message: "Bot Commit: ${{ env.COMMIT_MSG }}" #adds previous commit message to give the overlay.pngs a file history
       - run: echo $(git rev-parse HEAD)
       - id: head
         run: -|

@@ -65,7 +65,11 @@ class Config:
         self.clamp_max_prio = cfg[9] == "1"
 
 
-def get_nearest_color(hex_color: str) -> str:
+def get_nearest_color(hex_color: str, return_distance: bool = False) -> Union[str, tuple[str, float]]:
+    """
+    Get the nearest allowed color and its distance to the given color.
+    If return_distance is True, both the color and its distance are returned.
+    """
     rgb = hex_to_col(hex_color)
     distance = 10 ** 30
     new_hex = None
@@ -74,7 +78,10 @@ def get_nearest_color(hex_color: str) -> str:
         if new_distance < distance:
             new_hex = v
             distance = new_distance
+    if return_distance:
+        return new_hex, distance
     return new_hex
+
 
 
 def hex_to_col(hex_str) -> tuple[int, int, int]:

@@ -34,7 +34,7 @@ priority = 200
 overlay_only = false
 
 [[structure]]
-name = "swiss 24"
+name = "swiss 4"
 file = "swiss4.png"
 disabled = false
 startx = 781
@@ -73,7 +73,7 @@ overlay_only = false
 name = "test"
 file = "placeCH/lion.png"
 disabled = false
-startx = 10
-starty = 10
+startx = 100
+starty = 100
 priority = 200
 overlay_only = false
